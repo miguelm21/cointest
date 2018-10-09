@@ -99,7 +99,7 @@ bool Currency::generateGenesisBlock() {
   //std::string hex_tx_represent = Common::toHex(txb);
 
   // Hard code coinbase tx in genesis block, because through generating tx use random, but genesis should be always the same
-  std::string genesisCoinbaseTxHex = "010a01ff00018080d287e2bc2d02400fa471f42b5d2619835d5387609df104b3af197de62c638ae0d518d9d06b3a2101cf744b38fb9843560d7bff26c5b25350bdb4c5fdde62a63b62aea829cc643491";
+  std::string genesisCoinbaseTxHex = "010a01ff00018080e983b1de160244b887627b07856ee0aa1cdf3163f926b8ca75f572224601f52946b7b38bdf272101720cf16f6a3a89c59f0e981faf3de7ad4f24b6027740f59e7e50e89bb7da7520";
   BinaryArray minerTxBlob;
 
   bool r =
@@ -174,21 +174,9 @@ bool Currency::getBlockReward(uint8_t blockMajorVersion, size_t medianSize, size
 
   // LUK REWARD CHANGES
   uint64_t baseReward;
-  uint64_t factorCut = 44500000; // 0.445 LUK
-  uint64_t coinCut_v1 = 264000000000000; // 2.64M LUK
-  uint64_t coinCut_v2 = 292000000000000; // 2.92M LUK
 
-  if(alreadyGeneratedCoins < coinCut_v1) {
     // 100M >> 22
     baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
- } else if (alreadyGeneratedCoins >= coinCut_v1 && alreadyGeneratedCoins <= coinCut_v2) {
-    // 100M -> 0,445
-    baseReward = factorCut;
- } else {
-    // 100M >> 22
-    baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
- }
-
 
   //infinite minimal block rewards after block reward falls under m_finalSubsidy per minute
   uint64_t subsidyTarget = m_difficultyTarget / 60 * m_finalSubsidy;
